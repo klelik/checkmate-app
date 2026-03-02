@@ -1,0 +1,48 @@
+name: checkmate_app
+description: "CheckMate — UK Vehicle History Check. Know the truth before you buy."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State Management
+  flutter_riverpod: ^2.6.1
+
+  # Routing
+  go_router: ^14.8.1
+
+  # HTTP & Network
+  dio: ^5.7.0
+
+  # Local Storage
+  shared_preferences: ^2.5.3
+
+  # UI & Animations
+  flutter_animate: ^4.5.2
+  google_fonts: ^6.2.1
+  fl_chart: ^0.70.2
+  shimmer: ^3.0.0
+  smooth_page_indicator: ^1.2.0+3
+  percent_indicator: ^4.2.3
+
+  # Utilities
+  intl: ^0.19.0
+  uuid: ^4.5.1
+  equatable: ^2.0.7
+
+  # Icons
+  lucide_icons: ^0.257.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
