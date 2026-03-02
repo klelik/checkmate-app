@@ -339,8 +339,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     onTap: () => context.go('/compare'),
                   ),
                   _QuickActionCard(
-                    icon: LucideIcons.clipboardCheck,
-                    label: 'MOT Check',
+                    icon: LucideIcons.poundSterling,
+                    label: 'Value My Car',
                     isDark: isDark,
                     textPrimary: textPrimary,
                     onTap: () => context.go('/check'),

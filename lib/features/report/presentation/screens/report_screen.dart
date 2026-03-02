@@ -169,6 +169,10 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                         .animate()
                         .fadeIn(duration: 400.ms, delay: 650.ms)
                         .slideY(begin: 0.1, end: 0),
+                    _buildValuationCTA(check)
+                        .animate()
+                        .fadeIn(duration: 400.ms, delay: 680.ms)
+                        .slideY(begin: 0.1, end: 0),
                     _buildSpecsSection(check)
                         .animate()
                         .fadeIn(duration: 400.ms, delay: 700.ms)
@@ -2240,6 +2244,161 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
   }
 
   // -----------------------------------------------------------------------
+  // -- Valuation CTA --------------------------------------------------------
+
+  Widget _buildValuationCTA(VehicleCheckResult check) {
+    final val = check.valuation;
+    return GestureDetector(
+      onTap: () => context.push(
+        '/valuation/${check.registrationNumber.replaceAll(' ', '')}',
+      ),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: AppSpacing.lg),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.emerald.withValues(alpha: 0.15),
+              AppColors.primary.withValues(alpha: 0.10),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          border: Border.all(
+            color: AppColors.emerald.withValues(alpha: 0.3),
+            width: 1.5,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.xl),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: AppColors.emerald.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      LucideIcons.poundSterling,
+                      color: AppColors.emerald,
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Thinking of selling?',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            color: _textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'See what your car is worth across multiple buyers',
+                          style: GoogleFonts.dmSans(
+                            fontSize: 13,
+                            color: _textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Row(
+                children: [
+                  _buildMiniPrice('We Buy Any Car', val.privateSale * 0.85),
+                  const SizedBox(width: AppSpacing.sm),
+                  _buildMiniPrice('Private Sale', val.privateSale),
+                  const SizedBox(width: AppSpacing.sm),
+                  _buildMiniPrice('Dealer', val.dealer),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  color: AppColors.emerald,
+                  borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(LucideIcons.trendingUp,
+                        size: 18, color: Colors.white),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Get Full Valuation',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const Icon(LucideIcons.arrowRight,
+                        size: 16, color: Colors.white),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMiniPrice(String label, double price) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        decoration: BoxDecoration(
+          color: _cardColor.withValues(alpha: 0.7),
+          borderRadius: BorderRadius.circular(AppSpacing.sm),
+          border: Border.all(color: _borderColor),
+        ),
+        child: Column(
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                _formatCurrency(price),
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.emerald,
+                ),
+              ),
+            ),
+            const SizedBox(height: 2),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                style: GoogleFonts.dmSans(
+                  fontSize: 10,
+                  color: _textTertiary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   // 4. Bottom Actions Bar
   // -----------------------------------------------------------------------
 
@@ -2305,6 +2464,17 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
           ),
           const SizedBox(width: AppSpacing.sm),
           _buildActionButton(
+            icon: LucideIcons.poundSterling,
+            label: 'Value',
+            highlight: true,
+            onTap: () {
+              context.push(
+                '/valuation/${check.registrationNumber.replaceAll(' ', '')}',
+              );
+            },
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          _buildActionButton(
             icon: LucideIcons.fileText,
             label: 'PDF',
             onTap: () {
@@ -2340,6 +2510,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
     required IconData icon,
     required String label,
     required VoidCallback onTap,
+    bool highlight = false,
   }) {
     return Expanded(
       child: GestureDetector(
@@ -2348,21 +2519,30 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color: _surfaceColor,
+            color: highlight
+                ? AppColors.emerald.withValues(alpha: 0.1)
+                : _surfaceColor,
             borderRadius: BorderRadius.circular(AppSpacing.sm),
-            border: Border.all(color: _borderColor, width: 1),
+            border: Border.all(
+              color: highlight
+                  ? AppColors.emerald.withValues(alpha: 0.4)
+                  : _borderColor,
+              width: 1,
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 20, color: AppColors.primary),
+              Icon(icon,
+                  size: 20,
+                  color: highlight ? AppColors.emerald : AppColors.primary),
               const SizedBox(height: 4),
               Text(
                 label,
                 style: GoogleFonts.dmSans(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: _textSecondary,
+                  color: highlight ? AppColors.emerald : _textSecondary,
                 ),
               ),
             ],

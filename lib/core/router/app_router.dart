@@ -11,6 +11,7 @@ import '../../features/garage/presentation/screens/garage_screen.dart';
 import '../../features/compare/presentation/screens/compare_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/payment/presentation/screens/payment_screen.dart';
+import '../../features/valuation/presentation/screens/valuation_screen.dart';
 import '../widgets/app_shell.dart';
 
 class AppRouter {
@@ -89,6 +90,12 @@ class AppRouter {
           GoRoute(
             path: '/report/:reg',
             builder: (context, state) => ReportScreen(
+              registrationNumber: state.pathParameters['reg'] ?? '',
+            ),
+          ),
+          GoRoute(
+            path: '/valuation/:reg',
+            builder: (context, state) => ValuationScreen(
               registrationNumber: state.pathParameters['reg'] ?? '',
             ),
           ),
